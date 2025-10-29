@@ -21,8 +21,8 @@ Built using React + Vite, styled with Tailwind CSS, and powered by the Open-Mete
 
 🗂️ Folder Structure
 src/
-├── api/
-│   └── weatherApi.js
+|
+│
 ├── components/
 │   ├── SearchBar.jsx
 │   ├── CurrentWeatherCard.jsx
