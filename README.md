@@ -11,34 +11,15 @@ Built using React + Vite, styled with Tailwind CSS, and powered by the Open-Mete
 
 🕶 Theme Toggle: Switch between light and dark modes with localStorage persistence.
 
-🏙 Recent Searches: Quickly access previously searched cities.
 
-🧹 Clear History: Option to remove all recent cities.
+
+
 
 ⚙️ Error Handling: User-friendly messages for network errors or invalid locations.
 
 📱 Responsive UI: Works smoothly on mobile, tablet, and desktop.
 
-🗂️ Folder Structure
-src/
-|
-│
-├── components/
-│   ├── SearchBar.jsx
-│   ├── CurrentWeatherCard.jsx
-│   ├── WeeklyForecast.jsx
-│   ├── RecentCities.jsx
-│   └── Loader.jsx
-├── hooks/
-│   └── useWeather.js
-├── pages/
-│   └── Body.jsx
-├── utils/
-│   └── weatherDescriptions.js
-├── App.jsx
-└── main.jsx
 
-⚙️ Tech Stack
 
 Frontend: React 18, Vite
 
