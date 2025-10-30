@@ -1,24 +1,42 @@
-import React from "react";
+import { useState } from "react";
 
-const SearchBar = ({ city, setCity, onSubmit }) => (
-  <form
-    onSubmit={onSubmit}
-    className="flex flex-col sm:flex-row w-full max-w-md gap-3 mb-6"
-  >
-    <input
-      type="text"
-      placeholder="Enter city..."
-      value={city}
-      onChange={(e) => setCity(e.target.value)}
-      className="flex-1 p-3 rounded-lg border border-gray-300 dark:border-gray-700 bg-white dark:bg-gray-800 text-gray-800 dark:text-gray-100 focus:ring-2 focus:ring-blue-400 outline-none"
-    />
-    <button
-      type="submit"
-      className="bg-blue-500 hover:bg-blue-600 text-white px-5 py-3 rounded-lg transition-all"
+export default function SearchBar({ onSearch }) {
+  const [query, setQuery] = useState("");
+
+  const handleSearch = async (e) => {
+    e.preventDefault();
+    if (!query) return;
+
+    const res = await fetch(
+      `https://geocoding-api.open-meteo.com/v1/search?name=${query}`
+    );
+    const data = await res.json();
+    if (data?.results?.length > 0) {
+      const { latitude, longitude, name, country } = data.results[0];
+      onSearch({ latitude, longitude, name, country });
+    } else {
+      alert("City not found");
+    }
+  };
+
+  return (
+    <form
+      onSubmit={handleSearch}
+      className="flex gap-2 justify-center my-4 transition-all duration-300"
     >
-      Search
-    </button>
-  </form>
-);
-
-export default SearchBar;
+      <input
+        value={query}
+        onChange={(e) => setQuery(e.target.value)}
+        placeholder="Search city..."
+        className="input input-bordered w-full sm:w-64 focus:ring-2 focus:ring-blue-400
+        hover:border-blue-400 transition-all duration-200"
+      />
+      <button
+        className="btn btn-primary hover:scale-105 active:scale-95 transition-transform duration-200"
+        type="submit"
+      >
+        Search
+      </button>
+    </form>
+  );
+}

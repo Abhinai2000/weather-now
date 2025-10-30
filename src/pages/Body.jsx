@@ -1,50 +1,42 @@
-import React, { useState, useEffect } from "react";
-import { useWeather } from "../hooks/useWeather";
+import { useState } from "react";
 import SearchBar from "../components/SearchBar";
-import RecentCities from "../components/RecentCities";
-import CurrentWeatherCard from "../components/CurrentWeatherCard";
 import WeeklyForecast from "../components/WeeklyForecast";
+import CurrentWeather from "../components/CurrentWeather";
+import { useWeather } from "../hooks/useWeather";
 
-const Body = () => {
-  const [city, setCity] = useState("");
-  const [recentCities, setRecentCities] = useState([]);
-  const { weather, forecast, error, loading, fetchWeather } = useWeather();
+export default function Body() {
+  const [location, setLocation] = useState(null);
+  const { forecast, current, getWeather, loading } = useWeather();
 
-  useEffect(() => {
-    const saved = JSON.parse(localStorage.getItem("recentCities")) || [];
-    setRecentCities(saved);
-  }, []);
-
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    if (city.trim()) fetchWeather(city, recentCities, setRecentCities);
-  };
-
-  const clearRecentCities = () => {
-    localStorage.removeItem("recentCities");
-    setRecentCities([]);
+  const handleSearch = (loc) => {
+    setLocation(loc);
+    getWeather(loc.latitude, loc.longitude);
   };
 
   return (
-    <div className="flex flex-col items-center justify-center min-h-[80vh] px-4 py-6 text-center transition-all">
-      <SearchBar city={city} setCity={setCity} onSubmit={handleSubmit} />
-      {recentCities.length > 0 && (
-        <RecentCities
-          cities={recentCities}
-          onSelect={(c) => fetchWeather(c, recentCities, setRecentCities)}
-          onClear={clearRecentCities}
-        />
-      )}
-      {error && <p className="text-red-500 font-medium mb-4">{error}</p>}
+    <div
+      className="min-h-[80vh] flex flex-col items-center justify-start py-6 px-4 
+      bg-gradient-to-b from-base-100 to-base-300 text-base-content
+      transition-colors duration-500"
+    >
+      <h2 className="text-2xl font-bold mb-4 hover:scale-105 transition-transform duration-300">
+        Check Weekly Weather 🌦️
+      </h2>
+
+      <div className="w-full sm:w-[400px]">
+        <SearchBar onSearch={handleSearch} />
+      </div>
+
       {loading && (
-        <div className="flex items-center justify-center mb-4">
-          <div className="w-6 h-6 border-4 border-t-transparent border-blue-500 rounded-full animate-spin"></div>
-        </div>
+        <p className="mt-6 animate-pulse text-blue-500 font-semibold">
+          Loading...
+        </p>
       )}
-      {weather && !loading && <CurrentWeatherCard weather={weather} />}
-      {forecast.length > 0 && <WeeklyForecast forecast={forecast} />}
+
+      <div className="mt-4 w-full flex flex-col items-center gap-4">
+        <CurrentWeather current={current} location={location} />
+        <WeeklyForecast forecast={forecast} location={location} />
+      </div>
     </div>
   );
-};
-
-export default Body;
+}

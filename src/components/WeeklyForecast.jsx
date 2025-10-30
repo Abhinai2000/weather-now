@@ -1,25 +1,31 @@
-import React from "react";
-import { weatherDescriptions } from "../utils/weatherDescriptions";
+export default function WeeklyForecast({ forecast, location }) {
+  if (!forecast) return null;
 
-const WeeklyForecast = ({ forecast }) => (
-  <div className="grid grid-cols-2 sm:grid-cols-4 md:grid-cols-7 gap-4 w-full max-w-4xl">
-    {forecast.map((day) => (
-      <div
-        key={day.date}
-        className="bg-white dark:bg-gray-800 rounded-xl shadow-md p-4 flex flex-col items-center hover:scale-105 transition-transform"
-      >
-        <p className="font-medium text-gray-700 dark:text-gray-100 text-sm mb-1">
-          {new Date(day.date).toLocaleDateString("en-US", { weekday: "short" })}
-        </p>
-        <p className="text-2xl mb-1">
-          {weatherDescriptions[day.code]?.split(" ")[0] || "☁️"}
-        </p>
-        <p className="text-sm text-gray-600 dark:text-gray-400">
-          {day.min}° / <span className="font-semibold">{day.max}°</span>
-        </p>
+  const { daily } = forecast;
+
+  return (
+    <div className="text-center mt-6 w-full max-w-4xl">
+      <h2 className="text-xl font-semibold mb-3">
+        Weekly Forecast for {location.name}, {location.country}
+      </h2>
+      <div className="grid grid-cols-2 sm:grid-cols-4 md:grid-cols-7 gap-4">
+        {daily.time.map((day, i) => (
+          <div
+            key={day}
+            className="p-4 border rounded-xl shadow-sm bg-base-100 
+            hover:shadow-lg hover:-translate-y-1 hover:bg-base-200 
+            transition-all duration-300"
+          >
+            <p className="font-medium">{day}</p>
+            <p className="text-blue-600 dark:text-blue-400">
+              🌡️ Max: {daily.temperature_2m_max[i]}°C
+            </p>
+            <p className="text-gray-500 dark:text-gray-300">
+              🌡️ Min: {daily.temperature_2m_min[i]}°C
+            </p>
+          </div>
+        ))}
       </div>
-    ))}
-  </div>
-);
-
-export default WeeklyForecast;
+    </div>
+  );
+}
